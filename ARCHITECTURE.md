@@ -7,7 +7,7 @@ graph TD
     Client[Browser / User] --> |HTTPS| Caddy[Caddy Reverse Proxy]
     
     subgraph Reverse Proxy & Gateway
-        Caddy -->|turtle.infran.dev.br| WebApp[turtle - Web App Nginx :8080]
+        Caddy -->|finances.infran.dev.br| FinancesWeb[finances-web - Angular 22 :8081]
         Caddy -->|turtle.infran.dev.br/api| CoreGo[turtle - Go API :8080]
         Caddy -->|message.infran.dev.br/query| MsgGo[message - Go GraphQL API :8089]
         Caddy -->|message.infran.dev.br/ws| MsgGleam[message - Gleam WebSockets :8090]
@@ -22,6 +22,7 @@ graph TD
     end
 
     subgraph Mobile & Web Frontends
+        FinancesWeb --> CoreGo
         MessagerMobile[messager - Flutter Mobile] --> MsgGo
         MessagerMobile --> MsgGleam
         MessagerWeb[messager-web - Angular 22] --> MsgGo
@@ -35,8 +36,10 @@ graph TD
 ```
 
 ## Core Components
-- **`turtle`**: Main web application (React 18 + Vite) and primary financial management Go backend.
-- **`message`**: Dedicated messaging service with GraphQL (Go) for queries/mutations and Gleam (Mist/Wisp) for real-time WebSocket fanout via Valkey Pub/Sub.
+- **`turtle`**: Core Go financial API backend.
+- **`finances-web`**: Dedicated Angular 22 financial management web application.
+- **`message`**: Dedicated messaging service with GraphQL (Go) and Gleam (Mist/Wisp) WebSockets fanout via Valkey.
 - **`messager` & `messager-web`**: Specialized chat clients built in Flutter and Angular 22.
-- **`release-server`**: High-performance Rust binary server managing version downloads and client update channels.
+- **`release-server`**: High-performance Rust binary server managing client releases.
 - **`cli`**: Go Cobra CLI and Flutter GUI dashboard for ecosystem administration.
+- **`turtle-i18n`**: Standalone localization and translation package.
